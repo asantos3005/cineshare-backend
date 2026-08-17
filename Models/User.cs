@@ -20,9 +20,9 @@ public class User
 
     public ICollection<Like> Likes { get; set; } = [];
 
-    public ICollection<Movie> WatchedMovies { get; set; } = [];
+    public ICollection<MovieWatch> WatchHistory { get; set; } = [];
 
-    public ICollection<User> Followers { get; set; } = [];
+    public ICollection<UserFollow> Followers { get; set; } = [];
 
-    public ICollection<User> Following { get; set; } = [];
+    public ICollection<UserFollow> Following { get; set; } = [];
 }
