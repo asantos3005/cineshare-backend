@@ -30,6 +30,7 @@ public class CineShareDbContext : DbContext
             f.FollowerId,
             f.FollowingId
         });
+        
         modelBuilder.Entity<Like>()
         .HasKey(l => new
         {
