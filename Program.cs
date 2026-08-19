@@ -1,5 +1,6 @@
 using cineshare_backend.Data;
 using Microsoft.EntityFrameworkCore;
+using cineshare_backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,8 @@ builder.Services.AddDbContext<CineShareDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")
     )
 );
+
+builder.Services.AddScoped<ReviewService>();
 
 var app = builder.Build();
 

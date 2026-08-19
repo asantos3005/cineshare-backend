@@ -28,7 +28,25 @@ public class ReviewService
             r.CreatedAt
         ))
         .ToListAsync();
-}
+    }
+
+    public Task<ReviewResponse?> GetReviewByIdAsync(int reviewId)
+    {
+        return _db.Reviews
+            .Where(r => r.ReviewId == reviewId)
+            .Select(r => new ReviewResponse(
+                r.ReviewId,
+                r.UserId,
+                r.User.Username,
+                r.MovieId,
+                r.Movie.Title,
+                r.Title,
+                r.ReviewBody,
+                r.Rating,
+                r.CreatedAt
+            ))
+            .FirstOrDefaultAsync();
+    }
    
 
 }

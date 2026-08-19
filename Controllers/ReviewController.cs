@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using cineshare_backend.Services;
+using cineshare_backend.DTOs;
 using Microsoft.EntityFrameworkCore;
 using cineshare_backend.Data;
 using cineshare_backend.Models;
@@ -23,6 +24,19 @@ public class ReviewController : ControllerBase
         var reviews = await _reviewService.GetReviewsAsync();
 
         return Ok(reviews);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<ReviewResponse>> GetSpecificReview(int id)
+    {
+        var review = await _reviewService.GetReviewByIdAsync(id);
+
+        if (review == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(review);
     }
 
 }
