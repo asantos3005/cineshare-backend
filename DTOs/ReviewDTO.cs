@@ -5,6 +5,7 @@ public record ReviewResponse(
     string Username,
     int MovieId,
     string MovieTitle,
+    string PosterUrl,
     string Title,
     string ReviewBody,
     int Rating,
