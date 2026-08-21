@@ -3,6 +3,7 @@ public record ReviewResponse(
     int ReviewId,
     int UserId,
     string Username,
+    string UserProfilePictureUrl,
     int MovieId,
     string MovieTitle,
     DateOnly? MovieReleaseDate,
@@ -10,5 +11,6 @@ public record ReviewResponse(
     string Title,
     string ReviewBody,
     int Rating,
-    DateTime CreatedAt
+    DateTime CreatedAt,
+    int LikesCount
 );

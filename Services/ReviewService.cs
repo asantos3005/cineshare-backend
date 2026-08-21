@@ -14,23 +14,25 @@ public class ReviewService
     }
 
     public Task<List<ReviewResponse>> GetReviewsAsync()
-{
-    return _db.Reviews
-        .OrderByDescending(r => r.CreatedAt)
-        .Select(r => new ReviewResponse(
-            r.ReviewId,
-            r.UserId,
-            r.User.Username,
-            r.MovieId,
-            r.Movie.Title,
-            r.Movie.ReleaseDate,
-            r.Movie.PosterUrl,
-            r.Title,
-            r.ReviewBody,
-            r.Rating,
-            r.CreatedAt
-        ))
-        .ToListAsync();
+    {
+        return _db.Reviews
+            .OrderByDescending(r => r.CreatedAt)
+            .Select(r => new ReviewResponse(
+                r.ReviewId,
+                r.UserId,
+                r.User.Username,
+                r.User.ProfilePictureUrl,
+                r.MovieId,
+                r.Movie.Title,
+                r.Movie.ReleaseDate,
+                r.Movie.PosterUrl,
+                r.Title,
+                r.ReviewBody,
+                r.Rating,
+                r.CreatedAt,
+                r.Likes.Count
+            ))
+            .ToListAsync();
     }
 
     public Task<ReviewResponse?> GetReviewByIdAsync(int reviewId)
@@ -41,6 +43,7 @@ public class ReviewService
                 r.ReviewId,
                 r.UserId,
                 r.User.Username,
+                r.User.ProfilePictureUrl,
                 r.MovieId,
                 r.Movie.Title,
                 r.Movie.ReleaseDate,
@@ -48,7 +51,8 @@ public class ReviewService
                 r.Title,
                 r.ReviewBody,
                 r.Rating,
-                r.CreatedAt
+                r.CreatedAt,
+                r.Likes.Count
             ))
             .FirstOrDefaultAsync();
     }
