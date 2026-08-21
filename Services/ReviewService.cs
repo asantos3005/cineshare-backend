@@ -1,5 +1,6 @@
 namespace cineshare_backend.Services;
 using Microsoft.EntityFrameworkCore;
+using cineshare_backend.Models;
 using cineshare_backend.Data;
 using cineshare_backend.DTOs;
 
@@ -46,6 +47,57 @@ public class ReviewService
                 r.CreatedAt
             ))
             .FirstOrDefaultAsync();
+    }
+
+    public async Task<ReviewResponse?> CreateReviewAsync(CreateReviewRequest request)
+    {
+        var review = new Review
+        {
+            UserId = request.UserId,
+            MovieId = request.MovieId,
+            Title = request.Title,
+            ReviewBody = request.ReviewBody,
+            Rating = request.Rating
+        };
+
+        _db.Reviews.Add(review);
+
+        await _db.SaveChangesAsync();
+
+        return await GetReviewByIdAsync(review.ReviewId);
+    }
+
+    public async Task<ReviewResponse?> UpdateReviewAsync(int reviewId, UpdateReviewRequest request)
+    {
+        var review = await _db.Reviews.FindAsync(reviewId);
+
+        if (review == null)
+        {
+            return null;
+        }
+
+        review.Title = request.Title;
+        review.ReviewBody = request.ReviewBody;
+        review.Rating = request.Rating;
+
+        await _db.SaveChangesAsync();
+
+        return await GetReviewByIdAsync(review.ReviewId);
+    }
+
+    public async Task<bool> DeleteReviewAsync(int reviewId)
+    {
+        var review = await _db.Reviews.FindAsync(reviewId);
+
+        if (review == null)
+        {
+            return false;
+        }
+
+        _db.Reviews.Remove(review);
+        await _db.SaveChangesAsync();
+
+        return true;
     }
    
 

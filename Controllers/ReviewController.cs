@@ -41,14 +41,6 @@ public class ReviewController : ControllerBase
 
 }
 
-public record CreateReviewRequest(
-    int UserId,
-    int MovieId,
-    string Title,
-    string ReviewBody,
-    int Rating
-);
-
 public record UpdateReviewRequest(
     string Title,
     string ReviewBody,
