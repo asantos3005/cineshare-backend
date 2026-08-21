@@ -1,10 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using cineshare_backend.Services;
 using cineshare_backend.DTOs;
-using Microsoft.EntityFrameworkCore;
-using cineshare_backend.Data;
-using cineshare_backend.Models;
-
 namespace cineshare_backend.Controllers;
 
 [ApiController]
@@ -40,11 +36,3 @@ public class ReviewController : ControllerBase
     }
 
 }
-
-public record UpdateReviewRequest(
-    string Title,
-    string ReviewBody,
-    int Rating
-);
-
-

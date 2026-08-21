@@ -5,6 +5,7 @@ public record ReviewResponse(
     string Username,
     int MovieId,
     string MovieTitle,
+    DateOnly? MovieReleaseDate,
     string PosterUrl,
     string Title,
     string ReviewBody,
