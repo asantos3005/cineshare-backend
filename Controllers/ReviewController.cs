@@ -35,4 +35,12 @@ public class ReviewController : ControllerBase
         return Ok(review);
     }
 
+    [HttpPost]
+    public async Task<ActionResult<ReviewResponse>> CreateReview([FromBody] ReviewRequest reviewRequest)
+    {
+        var review = await _reviewService.CreateReviewAsync(reviewRequest);
+
+        return CreatedAtAction(nameof(GetSpecificReview), new { id = review.Id }, review);
+    }
+
 }

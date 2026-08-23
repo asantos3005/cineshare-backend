@@ -35,6 +35,13 @@ public class ReviewService
             .ToListAsync();
     }
 
+    /*
+    This service gets review by internal review ID. 
+    The internal review ID is generated when the review is created and stored in the database. 
+    Different from the external movie ID, which is used to fetch movie details from an external API, 
+    the internal review ID is unique to each review and is used to identify and manage 
+    reviews within the application.
+    */
     public Task<ReviewResponse?> GetReviewByIdAsync(int reviewId)
     {
         return _db.Reviews
@@ -62,7 +69,7 @@ public class ReviewService
         var review = new Review
         {
             UserId = request.UserId,
-            MovieId = request.MovieId,
+            ExternalMovieId = request.ExternalMovieId,
             Title = request.Title,
             ReviewBody = request.ReviewBody,
             Rating = request.Rating
