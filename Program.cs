@@ -31,6 +31,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped<ReviewService>();
+builder.Services.AddHttpClient<MovieService>();
 
 var app = builder.Build();
 
