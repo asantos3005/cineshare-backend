@@ -4,7 +4,7 @@ public record ReviewResponse(
     int UserId,
     string Username,
     string UserProfilePictureUrl,
-    int MovieId,
+    int InternalMovieId,
     string MovieTitle,
     int MovieReleaseYear,
     string PosterUrl,

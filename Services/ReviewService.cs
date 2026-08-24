@@ -8,9 +8,13 @@ public class ReviewService
 {
     private readonly CineShareDbContext _db;
 
-    public ReviewService(CineShareDbContext db)
+    private readonly MovieService _movieService;
+
+
+    public ReviewService(CineShareDbContext db, MovieService movieService)
     {
         _db = db;
+        _movieService = movieService;
     }
 
     public Task<List<ReviewResponse>> GetReviewsAsync()
@@ -22,7 +26,7 @@ public class ReviewService
                 r.UserId,
                 r.User.Username,
                 r.User.ProfilePictureUrl,
-                r.MovieId,
+                r.InternalMovieId,
                 r.Movie.Title,
                 r.Movie.ReleaseYear,
                 r.Movie.PosterUrl,
@@ -52,7 +56,7 @@ public class ReviewService
                 r.UserId,
                 r.User.Username,
                 r.User.ProfilePictureUrl,
-                r.MovieId,
+                r.InternalMovieId,
                 r.Movie.Title,
                 r.Movie.ReleaseYear,
                 r.Movie.PosterUrl,
@@ -65,12 +69,24 @@ public class ReviewService
             .FirstOrDefaultAsync();
     }
 
-    public async Task<ReviewResponse?> CreateReviewAsync(CreateReviewRequest request)
+   public async Task<ReviewResponse?> CreateReviewAsync(
+    CreateReviewRequest request)
     {
+        var movie = await _movieService
+            .GetInternalMovieByExternalIdAsync(request.ExternalMovieId);
+
+        if (movie is null)
+        {
+            movie = await _movieService
+                .FetchAndCreateNewInternalMovieAsync(
+                    request.ExternalMovieId
+                );
+        }
+
         var review = new Review
         {
             UserId = request.UserId,
-            ExternalMovieId = request.ExternalMovieId,
+            InternalMovieId = movie.InternalMovieId,
             Title = request.Title,
             ReviewBody = request.ReviewBody,
             Rating = request.Rating

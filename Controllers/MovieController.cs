@@ -18,7 +18,7 @@ public class MovieController : ControllerBase
     [HttpGet("{externalMovieId}")]
     public async Task<ActionResult<Movie>> GetMovieByExternalId(string externalMovieId)
     {
-        var movie = await _movieService.GetMovieByExternalIdAsync(externalMovieId);
+        var movie = await _movieService.GetInternalMovieByExternalIdAsync(externalMovieId);
 
         if (movie == null)
         {

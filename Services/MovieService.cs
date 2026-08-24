@@ -29,7 +29,7 @@ public class MovieService
         return false; // Movie does not exist
     }
 
-    public async Task<Movie> FetchAndCreateNewMovieInternalAsync(string externalMovieId)
+    public async Task<Movie> FetchAndCreateNewInternalMovieAsync(string externalMovieId)
     {
         // Fetch movie details from the external API using the externalMovieId
         var movieDetails = await FetchMovieDetailsFromExternalApiAsync(externalMovieId);
@@ -54,7 +54,7 @@ public class MovieService
         }
     }
 
-    public async Task<Movie?> GetMovieByExternalIdAsync(string externalMovieId)
+    public async Task<Movie?> GetInternalMovieByExternalIdAsync(string externalMovieId)
     {
         return await _db.Movies.FirstOrDefaultAsync(m => m.ExternalMovieId == externalMovieId);
     }

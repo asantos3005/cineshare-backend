@@ -2,7 +2,7 @@ namespace cineshare_backend.Models;
 
 public class Movie
 {
-    public int MovieId { get; set; }
+    public int InternalMovieId { get; set; }
 
     public string ExternalMovieId { get; set; } = "";
 

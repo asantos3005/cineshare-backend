@@ -6,9 +6,7 @@ public class Review
     public int UserId { get; set; }
     public User User { get; set; } = null!;
 
-    public int ExternalMovieId { get; set; } // New property to store the external movie ID
-
-    public int MovieId { get; set; }
+    public int InternalMovieId { get; set; }
     public Movie Movie { get; set; } = null!;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
