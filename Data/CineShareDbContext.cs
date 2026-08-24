@@ -45,6 +45,13 @@ public class CineShareDbContext : DbContext
             mw.MovieId
         });
 
+        modelBuilder.Entity<Movie>()
+            .HasKey(m => m.InternalMovieId);
+
+        modelBuilder.Entity<Review>()
+            .HasOne(r => r.Movie)
+            .WithMany(m => m.Reviews)
+            .HasForeignKey(r => r.InternalMovieId);
 
         modelBuilder.Entity<UserFollow>()
             .HasOne(f => f.Follower)
