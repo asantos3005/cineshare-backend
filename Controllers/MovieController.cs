@@ -28,12 +28,12 @@ public class MovieController : ControllerBase
         return Ok(movie);
     }
 
-    [HttpGet("/search={searchKeyword}")]
-    public async Task<ActionResult<IEnumerable<OmdbSearchResponse>>> SearchMoviesExternal(string searchKeyword)
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<OmdbSearchResponse>>> SearchMoviesExternal([FromQuery] string searchKeyword)
     {
         var movies = await _movieService.SearchMoviesExternalAsync(searchKeyword);
 
-        if (movies == null)
+        if (movies.Count == 0)
         {
             return NotFound();
         }

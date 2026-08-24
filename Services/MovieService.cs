@@ -71,7 +71,7 @@ public class MovieService
         var encodedTitle = Uri.EscapeDataString(title);
 
         var url =
-            $"https://www.omdbapi.com/&s={encodedTitle}&type=movie?apikey={apiKey}";
+            $"https://www.omdbapi.com/?apikey={apiKey}&s={encodedTitle}&type=movie";
 
         var response = await _httpClient.GetAsync(url);
 
