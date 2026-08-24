@@ -8,7 +8,7 @@ entry in the database if it doesn't exist yet.
 */
 public record CreateReviewRequest(
     int UserId,
-    int ExternalMovieId,
+    string ExternalMovieId,
     string Title,
     string ReviewBody,
     int Rating
