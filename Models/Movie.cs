@@ -4,13 +4,13 @@ public class Movie
 {
     public int MovieId { get; set; }
 
-    public int ExternalMovieId { get; set; }
+    public string ExternalMovieId { get; set; } = "";
 
     public string Title { get; set; } = "";
 
     public string PosterUrl { get; set; } = "";
 
-    public DateOnly? ReleaseDate { get; set; }
+    public int ReleaseYear { get; set; } = 0;
 
     public ICollection<Review> Reviews { get; set; } = [];
 

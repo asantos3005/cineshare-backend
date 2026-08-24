@@ -24,7 +24,7 @@ public class ReviewService
                 r.User.ProfilePictureUrl,
                 r.MovieId,
                 r.Movie.Title,
-                r.Movie.ReleaseDate,
+                r.Movie.ReleaseYear,
                 r.Movie.PosterUrl,
                 r.Title,
                 r.ReviewBody,
@@ -34,6 +34,7 @@ public class ReviewService
             ))
             .ToListAsync();
     }
+
 
     /*
     This service gets review by internal review ID. 
@@ -53,7 +54,7 @@ public class ReviewService
                 r.User.ProfilePictureUrl,
                 r.MovieId,
                 r.Movie.Title,
-                r.Movie.ReleaseDate,
+                r.Movie.ReleaseYear,
                 r.Movie.PosterUrl,
                 r.Title,
                 r.ReviewBody,

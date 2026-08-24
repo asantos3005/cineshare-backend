@@ -6,7 +6,7 @@ public record ReviewResponse(
     string UserProfilePictureUrl,
     int MovieId,
     string MovieTitle,
-    DateOnly? MovieReleaseDate,
+    int MovieReleaseYear,
     string PosterUrl,
     string Title,
     string ReviewBody,
