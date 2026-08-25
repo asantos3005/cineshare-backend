@@ -1,6 +1,10 @@
 using cineshare_backend.Data;
+using cineshare_backend.Models;
 using Microsoft.EntityFrameworkCore;
 using cineshare_backend.Services;
+using Microsoft.AspNetCore.Identity;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +20,11 @@ builder.Services.AddDbContext<CineShareDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")
     )
 );
+
+builder.Services
+    .AddIdentity<User, IdentityRole<int>>()
+    .AddEntityFrameworkStores<CineShareDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddCors(options =>
 {
@@ -44,6 +53,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors(myAllowSpecificOrigins);
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

@@ -1,15 +1,9 @@
 namespace cineshare_backend.Models;
+using Microsoft.AspNetCore.Identity;
 
-public class User
+
+public class User : IdentityUser<int>
 {
-    public int UserId { get; set; }
-
-    public string Username { get; set; } = "";
-
-    public string Email { get; set; } = "";
-
-    public string PasswordHash { get; set; } = "";
-
     public string ProfilePictureUrl { get; set; } = "";
 
     public string Bio { get; set; } = "";

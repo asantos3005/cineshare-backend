@@ -24,7 +24,7 @@ public class ReviewService
             .Select(r => new ReviewResponse(
                 r.ReviewId,
                 r.UserId,
-                r.User.Username,
+                r.User.UserName ?? "",
                 r.User.ProfilePictureUrl,
                 r.InternalMovieId,
                 r.Movie.Title,
@@ -54,7 +54,7 @@ public class ReviewService
             .Select(r => new ReviewResponse(
                 r.ReviewId,
                 r.UserId,
-                r.User.Username,
+                r.User.UserName ?? "",
                 r.User.ProfilePictureUrl,
                 r.InternalMovieId,
                 r.Movie.Title,
@@ -97,7 +97,7 @@ public class ReviewService
             .Select(r => new ReviewResponse(
                 r.ReviewId,
                 r.UserId,
-                r.User.Username,
+                r.User.UserName ?? "",
                 r.User.ProfilePictureUrl,
                 r.InternalMovieId,
                 r.Movie.Title,

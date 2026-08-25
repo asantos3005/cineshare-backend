@@ -1,9 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using cineshare_backend.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace cineshare_backend.Data;
 
-public class CineShareDbContext : DbContext
+
+public class CineShareDbContext : IdentityDbContext<User, IdentityRole<int>, int>
 {
     public CineShareDbContext(
         DbContextOptions<CineShareDbContext> options
@@ -11,7 +14,6 @@ public class CineShareDbContext : DbContext
     {
     }
 
-    public DbSet<User> Users { get; set; }
     public DbSet<Review> Reviews { get; set; }
     public DbSet<Movie> Movies { get; set; }
     public DbSet<Genre> Genres { get; set; }
@@ -68,7 +70,7 @@ public class CineShareDbContext : DbContext
             .IsUnique();
 
         modelBuilder.Entity<User>()
-            .HasIndex(u => u.Username)
+            .HasIndex(u => u.UserName)
             .IsUnique();
 
         modelBuilder.Entity<Genre>()

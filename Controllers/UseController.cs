@@ -20,7 +20,7 @@ public class UserController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<MyReviewResponse>>> GetReviews()
     {
-        var reviews = await _reviewService.GetMyReviewsAsync(id));
+        var reviews = await _reviewService.GetMyReviewsAsync(1);
         return Ok(reviews);
     }
 }
