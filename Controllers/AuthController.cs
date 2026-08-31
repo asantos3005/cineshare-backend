@@ -3,6 +3,7 @@ using cineshare_backend.Services;
 using cineshare_backend.Models;
 using cineshare_backend.DTOs;
 namespace cineshare_backend.Controllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
 
@@ -37,6 +38,8 @@ public class AuthController : ControllerBase
             return BadRequest(result.Errors);
         }
 
+        await _signInManager.SignInAsync(user, isPersistent: true);
+
         return Ok();
     }
 
@@ -63,5 +66,23 @@ public class AuthController : ControllerBase
     {
         await _signInManager.SignOutAsync();
         return Ok();
+    }
+
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<IActionResult> GetCurrentUser()
+    {
+        var user = await _userManager.GetUserAsync(User);
+
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+
+        return Ok(new
+        {
+            userId = user.Id,
+            username = user.UserName
+        });
     }
 }
