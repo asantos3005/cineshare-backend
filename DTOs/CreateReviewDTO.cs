@@ -7,7 +7,6 @@ The external movie ID is used to fetch the movie details from the external API a
 entry in the database if it doesn't exist yet.
 */
 public record CreateReviewRequest(
-    int UserId,
     string ExternalMovieId,
     string Title,
     string ReviewBody,

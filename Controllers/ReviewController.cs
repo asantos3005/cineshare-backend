@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using cineshare_backend.Services;
 using cineshare_backend.DTOs;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using cineshare_backend.Models;
 namespace cineshare_backend.Controllers;
 
 [ApiController]
@@ -8,10 +11,14 @@ namespace cineshare_backend.Controllers;
 public class ReviewController : ControllerBase
 {
     private readonly ReviewService _reviewService;
+    private readonly UserManager<User> _userManager;
 
-    public ReviewController(ReviewService reviewService)
+    public ReviewController(
+        ReviewService reviewService,
+        UserManager<User> userManager)
     {
         _reviewService = reviewService;
+        _userManager = userManager;
     }
 
     [HttpGet]
@@ -35,10 +42,23 @@ public class ReviewController : ControllerBase
         return Ok(review);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<ReviewResponse>> CreateReview([FromBody] CreateReviewRequest reviewRequest)
     {
-        var review = await _reviewService.CreateReviewAsync(reviewRequest);
+        var user = await _userManager.GetUserAsync(User);
+
+        if (user is null)
+        {
+            return Unauthorized();
+        }
+
+        var review = await _reviewService.CreateReviewAsync(reviewRequest, user.Id);
+
+        if (review is null)
+        {
+            return Problem("The review was created, but the response could not be loaded.");
+        }
 
         return CreatedAtAction(nameof(GetSpecificReview), new { id = review.ReviewId }, review);
     }

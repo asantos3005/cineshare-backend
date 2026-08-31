@@ -113,7 +113,8 @@ public class ReviewService
     }
 
    public async Task<ReviewResponse?> CreateReviewAsync(
-    CreateReviewRequest request)
+    CreateReviewRequest request,
+    int userId)
     {
         var movie = await _movieService
             .GetInternalMovieByExternalIdAsync(request.ExternalMovieId);
@@ -128,7 +129,7 @@ public class ReviewService
 
         var review = new Review
         {
-            UserId = request.UserId,
+            UserId = userId,
             InternalMovieId = movie.InternalMovieId,
             Title = request.Title,
             ReviewBody = request.ReviewBody,

@@ -38,8 +38,6 @@ public class AuthController : ControllerBase
             return BadRequest(result.Errors);
         }
 
-        await _signInManager.SignInAsync(user, isPersistent: true);
-
         return Ok();
     }
 
@@ -82,7 +80,8 @@ public class AuthController : ControllerBase
         return Ok(new
         {
             userId = user.Id,
-            username = user.UserName
+            username = user.UserName,
+            profileUrl = user.ProfilePictureUrl
         });
     }
 }
