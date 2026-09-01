@@ -33,6 +33,8 @@ namespace cineshare_backend.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    FirstName = table.Column<string>(type: "text", nullable: false),
+                    LastName = table.Column<string>(type: "text", nullable: false),
                     ProfilePictureUrl = table.Column<string>(type: "text", nullable: false),
                     Bio = table.Column<string>(type: "text", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -294,6 +296,30 @@ namespace cineshare_backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserFavouriteMovie",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    MovieId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserFavouriteMovie", x => new { x.UserId, x.MovieId });
+                    table.ForeignKey(
+                        name: "FK_UserFavouriteMovie_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserFavouriteMovie_Movies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "Movies",
+                        principalColumn: "InternalMovieId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Likes",
                 columns: table => new
                 {
@@ -405,6 +431,11 @@ namespace cineshare_backend.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserFavouriteMovie_MovieId",
+                table: "UserFavouriteMovie",
+                column: "MovieId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserFollows_FollowingId",
                 table: "UserFollows",
                 column: "FollowingId");
@@ -436,6 +467,9 @@ namespace cineshare_backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "MovieWatches");
+
+            migrationBuilder.DropTable(
+                name: "UserFavouriteMovie");
 
             migrationBuilder.DropTable(
                 name: "UserFollows");

@@ -28,7 +28,7 @@ public class UserController : ControllerBase
     // Get all of the current user's reviews
     [Authorize]
     [HttpGet("my-reviews")]
-    public async Task<ActionResult<IEnumerable<MyReviewResponse>>> GetReviews()
+    public async Task<ActionResult<IEnumerable<MyReviewResponse>>> GetMyReviews()
     {
         var user = await _userManager.GetUserAsync(User);
 
@@ -39,5 +39,26 @@ public class UserController : ControllerBase
 
         var reviews = await _reviewService.GetMyReviewsAsync(user.Id);
         return Ok(reviews);
+    }
+
+    [Authorize]
+    [HttpGet("my-profile")]
+    public async Task<ActionResult<ProfileResponse>> GetMyProfile()
+    {
+        var user = await _userManager.GetUserAsync(User);
+
+        if (user is null)
+        {
+            return Unauthorized();
+        }
+
+        var profile = await _userService.GetProfileByUserIdAsync(user.Id);
+
+        if (profile is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(profile);
     }
 }

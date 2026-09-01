@@ -4,11 +4,17 @@ using Microsoft.AspNetCore.Identity;
 
 public class User : IdentityUser<int>
 {
+    public string FirstName { get; set; } = "";
+
+    public string LastName { get; set; } = "";
+
     public string ProfilePictureUrl { get; set; } = "";
 
     public string Bio { get; set; } = "";
 
     public ICollection<Genre> FavoriteGenres { get; set; } = [];
+
+    public ICollection<Movie>? FourFavouriteMovies { get; set; }
 
     public ICollection<Review> Reviews { get; set; } = [];
 

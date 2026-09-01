@@ -55,6 +55,25 @@ public class CineShareDbContext : IdentityDbContext<User, IdentityRole<int>, int
             .WithMany(m => m.Reviews)
             .HasForeignKey(r => r.InternalMovieId);
 
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.FourFavouriteMovies)
+            .WithMany()
+            .UsingEntity<Dictionary<string, object>>(
+                "UserFavouriteMovie",
+                j => j
+                    .HasOne<Movie>()
+                    .WithMany()
+                    .HasForeignKey("MovieId")
+                    .HasPrincipalKey(m => m.InternalMovieId),
+                j => j
+                    .HasOne<User>()
+                    .WithMany()
+                    .HasForeignKey("UserId"),
+                j =>
+                {
+                    j.HasKey("UserId", "MovieId");
+                });
+
         modelBuilder.Entity<UserFollow>()
             .HasOne(f => f.Follower)
             .WithMany(u => u.Following)

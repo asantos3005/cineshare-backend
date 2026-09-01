@@ -28,7 +28,9 @@ public class AuthController : ControllerBase
         var user = new User
         {
             UserName = request.UserName,
-            Email = request.Email
+            Email = request.Email,
+            FirstName = request.FirstName,
+            LastName = request.LastName
         };
 
         var result = await _userManager.CreateAsync(user, request.Password);
@@ -81,6 +83,8 @@ public class AuthController : ControllerBase
         {
             userId = user.Id,
             username = user.UserName,
+            firstName = user.FirstName,
+            lastName = user.LastName,
             profileUrl = user.ProfilePictureUrl
         });
     }
