@@ -12,7 +12,7 @@ using cineshare_backend.Data;
 namespace cineshare_backend.Migrations
 {
     [DbContext(typeof(CineShareDbContext))]
-    [Migration("20260903022024_InitialCreate")]
+    [Migration("20260901004016_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -323,6 +323,7 @@ namespace cineshare_backend.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Bio")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -368,6 +369,7 @@ namespace cineshare_backend.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("ProfilePictureUrl")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("SecurityStamp")
