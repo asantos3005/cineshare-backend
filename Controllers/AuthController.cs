@@ -30,7 +30,9 @@ public class AuthController : ControllerBase
             UserName = request.UserName,
             Email = request.Email,
             FirstName = request.FirstName,
-            LastName = request.LastName
+            LastName = request.LastName,
+            ProfilePictureUrl = "",
+            Bio = ""
         };
 
         var result = await _userManager.CreateAsync(user, request.Password);

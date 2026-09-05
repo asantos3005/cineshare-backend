@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using cineshare_backend.Data;
@@ -11,9 +12,11 @@ using cineshare_backend.Data;
 namespace cineshare_backend.Migrations
 {
     [DbContext(typeof(CineShareDbContext))]
-    partial class CineShareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260903040046_MakeUserProfileFieldsOptional")]
+    partial class MakeUserProfileFieldsOptional
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
