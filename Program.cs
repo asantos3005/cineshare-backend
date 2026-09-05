@@ -46,6 +46,46 @@ builder.Services.AddHttpClient<MovieService>();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<CineShareDbContext>();
+
+    var genreNames = new[]
+    {
+        "Action",
+        "Adventure",
+        "Animation",
+        "Comedy",
+        "Crime",
+        "Documentary",
+        "Drama",
+        "Family",
+        "Fantasy",
+        "History",
+        "Horror",
+        "Music",
+        "Mystery",
+        "Romance",
+        "Science Fiction",
+        "TV Movie",
+        "Thriller",
+        "War",
+        "Western",
+        "Musical"
+    };
+
+    var existingGenreNames = await db.Genres
+        .Select(g => g.GenreName)
+        .ToListAsync();
+
+    var genresToAdd = genreNames
+        .Except(existingGenreNames)
+        .Select(genreName => new Genre { GenreName = genreName });
+
+    db.Genres.AddRange(genresToAdd);
+    await db.SaveChangesAsync();
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
