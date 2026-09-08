@@ -7,11 +7,13 @@ using cineshare_backend.DTOs;
 public class UserService
 {
     private readonly CineShareDbContext _db;
+    private readonly MovieService _movieService;
 
 
-    public UserService(CineShareDbContext db)
+    public UserService(CineShareDbContext db, MovieService movieService)
     {
         _db = db;
+        _movieService = movieService;
     }
 
     public Task<ProfileResponse?> GetProfileByUserIdAsync(int userId)
@@ -147,4 +149,125 @@ public class UserService
 
         return true;
     }
+
+    public async Task<ProfileResponse?> EditProfileAsync(
+        int userId,
+        EditProfileRequest request,
+        IReadOnlySet<string> providedFields)
+    {
+        var user = await _db.Users
+            .Include(u => u.FavoriteGenres)
+            .Include(u => u.FourFavouriteMovies)
+            .FirstOrDefaultAsync(u => u.Id == userId);
+
+        if (user is null)
+        {
+            return null;
+        }
+
+        if (providedFields.Contains(nameof(EditProfileRequest.FirstName)) &&
+            request.FirstName is not null)
+        {
+            user.FirstName = request.FirstName;
+        }
+
+        if (providedFields.Contains(nameof(EditProfileRequest.LastName)) &&
+            request.LastName is not null)
+        {
+            user.LastName = request.LastName;
+        }
+
+        if (providedFields.Contains(nameof(EditProfileRequest.ProfilePictureUrl)))
+        {
+            user.ProfilePictureUrl = request.ProfilePictureUrl;
+        }
+
+        if (providedFields.Contains(nameof(EditProfileRequest.Bio)))
+        {
+            user.Bio = request.Bio;
+        }
+
+        if (providedFields.Contains(nameof(EditProfileRequest.Genres)) &&
+            request.Genres is not null)
+        {
+            var genreNames = request.Genres
+                .Where(genre => !string.IsNullOrWhiteSpace(genre))
+                .Select(genre => genre.Trim())
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            var genres = await _db.Genres
+                .Where(genre => genreNames.Contains(genre.GenreName))
+                .ToListAsync();
+
+            if (genres.Count != genreNames.Count)
+            {
+                return null;
+            }
+
+            user.FavoriteGenres.Clear();
+
+            foreach (var genre in genres)
+            {
+                user.FavoriteGenres.Add(genre);
+            }
+        }
+
+        if (providedFields.Contains(nameof(EditProfileRequest.FourFavouriteMovies)) &&
+            request.FourFavouriteMovies is not null)
+        {
+            var movieRequests = request.FourFavouriteMovies
+                .DistinctBy(movie => movie.MovieId is not null
+                    ? $"internal:{movie.MovieId}"
+                    : $"external:{movie.ExternalMovieId}")
+                .ToList();
+
+            if (movieRequests.Count > 4)
+            {
+                return null;
+            }
+
+            var movies = new List<Movie>();
+
+            foreach (var movieRequest in movieRequests)
+            {
+                var movie = movieRequest.MovieId is not null
+                    ? await _db.Movies.FirstOrDefaultAsync(movie =>
+                        movie.InternalMovieId == movieRequest.MovieId)
+                    : null;
+
+                if (movie is null && !string.IsNullOrWhiteSpace(movieRequest.ExternalMovieId))
+                {
+                    movie = await _movieService.GetInternalMovieByExternalIdAsync(
+                        movieRequest.ExternalMovieId);
+
+                    if (movie is null)
+                    {
+                        movie = await _movieService.FetchAndCreateNewInternalMovieAsync(
+                            movieRequest.ExternalMovieId);
+                    }
+                }
+
+                if (movie is null)
+                {
+                    return null;
+                }
+
+                movies.Add(movie);
+            }
+
+            user.FourFavouriteMovies ??= [];
+            user.FourFavouriteMovies.Clear();
+
+            foreach (var movie in movies)
+            {
+                user.FourFavouriteMovies.Add(movie);
+            }
+        }
+
+        await _db.SaveChangesAsync();
+
+        return await GetProfileByUserIdAsync(userId);
+    }
+
 }

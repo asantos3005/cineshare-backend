@@ -1,4 +1,5 @@
 namespace cineshare_backend.DTOs;
+using System.Text.Json.Serialization;
 
 public record ProfileResponse(
     string FirstName,
@@ -19,6 +20,7 @@ public record ProfileStatsResponse(
 );
 
 public record ProfileMovieResponse(
+    [property: JsonPropertyName("movieId")]
     int InternalMovieId,
     string Title,
     string PosterUrl

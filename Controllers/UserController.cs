@@ -4,6 +4,7 @@ using cineshare_backend.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using cineshare_backend.Models;
+using System.Text.Json;
 namespace cineshare_backend.Controllers;
 
 [ApiController]
@@ -137,5 +138,47 @@ public class UserController : ControllerBase
         }
 
         return Ok();
+    }
+
+    [Authorize]
+    [HttpPatch("profile/me")]
+    public async Task<ActionResult<ProfileResponse>> EditProfile([FromBody] JsonElement requestBody)
+    {
+        if (requestBody.ValueKind != JsonValueKind.Object)
+        {
+            return BadRequest();
+        }
+
+        var user = await _userManager.GetUserAsync(User);
+
+        if (user is null)
+        {
+            return Unauthorized();
+        }
+
+        var request = requestBody.Deserialize<EditProfileRequest>(
+            new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+        if (request is null)
+        {
+            return BadRequest();
+        }
+
+        var providedFields = requestBody
+            .EnumerateObject()
+            .Select(property => property.Name)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var updatedProfile = await _userService.EditProfileAsync(user.Id, request, providedFields);
+
+        if (updatedProfile is null)
+        {
+            return BadRequest();
+        }
+
+        return Ok(updatedProfile);
     }
 }

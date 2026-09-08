@@ -8,7 +8,7 @@ public class GenreService
 {
     private readonly CineShareDbContext _db;
 
-    public GenreService(CineShareDbContext db, IConfiguration configuration, HttpClient httpClient)
+    public GenreService(CineShareDbContext db)
     {
         _db = db;
     }
