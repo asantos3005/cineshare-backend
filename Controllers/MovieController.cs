@@ -41,4 +41,14 @@ public class MovieController : ControllerBase
         return Ok(movies);
     }   
 
+
+    // Endpoint called to return a bunch of external movies from OMDB - do not need
+    // to create internal representation
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<OmdbSearchResponse>>> GetExternalMovies()
+    {
+        
+    }
+
+
 }

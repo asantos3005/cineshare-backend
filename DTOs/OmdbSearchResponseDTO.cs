@@ -21,3 +21,15 @@ public record OmdbSearchApiMovie(
     string Type,
     [property: JsonPropertyName("Poster")] string? PosterUrl
 );
+
+
+public record OmdbSearchApiMovieDetailed(
+    string Title,
+    string Year,
+    [property: JsonPropertyName("imdbID")] string ExternalMovieId,
+    string Type,
+    [property: JsonPropertyName("Poster")] string? PosterUrl,
+    string Director,
+    string Actors,
+    string Plot
+);
