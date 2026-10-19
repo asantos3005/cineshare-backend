@@ -42,8 +42,8 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddScoped<ReviewService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<GenreService>();
 builder.Services.AddHttpClient<MovieService>();
-builder.Services.AddHttpClient<GenreService>();
 
 
 var app = builder.Build();
@@ -104,5 +104,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
 

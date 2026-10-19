@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using cineshare_backend.Models;
 using cineshare_backend.Data;
 using cineshare_backend.DTOs;
+using Microsoft.AspNetCore.Mvc;
 
 public class ReviewService
 {
@@ -161,20 +162,27 @@ public class ReviewService
         return await GetReviewByIdAsync(review.ReviewId);
     }
 
-    public async Task<bool> DeleteReviewAsync(int reviewId)
+    public async Task<bool> DeleteReviewAsync(int reviewId, int userId)
+{
+    // Find the review only if it belongs to the authenticated user.
+    var review = await _db.Reviews
+        .FirstOrDefaultAsync(r =>
+            r.ReviewId == reviewId &&
+            r.UserId == userId);
+
+    if (review == null)
     {
-        var review = await _db.Reviews.FindAsync(reviewId);
-
-        if (review == null)
-        {
-            return false;
-        }
-
-        _db.Reviews.Remove(review);
-        await _db.SaveChangesAsync();
-
-        return true;
+        return false;
     }
+
+    // Mark the review for deletion in EF Core's change tracker.
+    _db.Reviews.Remove(review);
+
+    // Persist the deletion to the database.
+    await _db.SaveChangesAsync();
+
+    return true;
+}
    
 
 }

@@ -63,4 +63,25 @@ public class ReviewController : ControllerBase
         return CreatedAtAction(nameof(GetSpecificReview), new { id = review.ReviewId }, review);
     }
 
+    [Authorize]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteReview(int id)
+    {
+        var user = await _userManager.GetUserAsync(User);
+
+        if (user is null)
+        {
+            return Unauthorized();
+        }
+
+        bool deleted = await _reviewService.DeleteReviewAsync(id, user.Id);
+
+        if (!deleted)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
+    }
+
 }
