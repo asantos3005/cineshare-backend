@@ -22,6 +22,11 @@ public record OmdbSearchApiMovie(
     [property: JsonPropertyName("Poster")] string? PosterUrl
 );
 
+public record OmdbSearchApiDetailedResponse(
+    List<OmdbSearchApiMovieDetailed>? Search,
+    string Response,
+    string? Error
+);
 
 public record OmdbSearchApiMovieDetailed(
     string Title,
