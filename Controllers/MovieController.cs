@@ -47,10 +47,11 @@ public class MovieController : ControllerBase
 
     // Populate the movie page with a preselected selection of movies - omdb free api
     // does not have a movie discovery endpoint so this is temporary option
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<OmdbSearchApiDetailedResponse>>> GetExternalMovies()
+    [HttpGet("discover")]
+    public async Task<ActionResult<IEnumerable<OmdbSearchApiMovieDetailed>>> GetMovies()
     {
-        // Iterate over hardcoded list and return a list of the details
+        List<OmdbSearchApiMovieDetailed> movies = await _movieService.PopulateMoviePage();
+        return movies;
     }
 
 
