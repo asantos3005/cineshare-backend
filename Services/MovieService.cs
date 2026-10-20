@@ -4,6 +4,7 @@ using cineshare_backend.Models;
 using cineshare_backend.Data;
 using cineshare_backend.DTOs;
 
+
 public class MovieService
 {
     private readonly CineShareDbContext _db;
@@ -16,6 +17,24 @@ public class MovieService
         _configuration = configuration;
         _httpClient = httpClient;
     }
+
+
+    private static readonly string[] FeaturedMovieIds =
+    {
+        "tt0816692", // Interstellar
+        "tt1375666", // Inception
+        "tt0133093", // The Matrix
+        "tt0111161", // The Shawshank Redemption
+        "tt0076759",  // Star Wars
+        "tt0126029",  // Shrek
+        "tt2582802", // Whiplash
+        "tt1285016", // Social Network
+        "tt0116483", // Happy Gilmore
+        "tt0088247", // Terminator
+        "tt0499549", // Avatar
+        "tt0113497" // Jumanji
+
+    };
 
     public async Task<bool> MovieExistsAsync(string externalMovieId)
     {
@@ -94,6 +113,36 @@ public class MovieService
             ))
             .ToList();
     }
+
+    public async Task<List<OmdbSearchApiMovieDetailed>> PopulateMoviePage()
+    {
+        List<OmdbSearchApiMovieDetailed> movieList = new();
+
+        var apiKey = GetOmdbApiKey();
+
+        foreach (string movieId in FeaturedMovieIds)
+        {
+            var encodedId = Uri.EscapeDataString(movieId);
+
+            var url =
+                $"https://www.omdbapi.com/?apikey={apiKey}&i={encodedId}&type=movie";
+
+            using var response = await _httpClient.GetAsync(url);
+
+            response.EnsureSuccessStatusCode();
+
+            var movie = await response.Content
+                .ReadFromJsonAsync<OmdbSearchApiMovieDetailed>();
+
+            if (movie != null)
+            {
+                movieList.Add(movie);
+            }
+        }
+
+        return movieList;
+    }
+    
 
     /*
     Private Utility Functions

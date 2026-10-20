@@ -44,10 +44,13 @@ public class MovieController : ControllerBase
 
     // Endpoint called to return a bunch of external movies from OMDB - do not need
     // to create internal representation
+
+    // Populate the movie page with a preselected selection of movies - omdb free api
+    // does not have a movie discovery endpoint so this is temporary option
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<OmdbSearchResponse>>> GetExternalMovies()
+    public async Task<ActionResult<IEnumerable<OmdbSearchApiDetailedResponse>>> GetExternalMovies()
     {
-        
+        // Iterate over hardcoded list and return a list of the details
     }
 
 
